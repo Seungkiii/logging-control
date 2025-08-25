@@ -4,6 +4,7 @@ import ac.su.kdt.loggingcontrol.domain.CartForm;
 import ac.su.kdt.loggingcontrol.domain.OrderForm;
 import ac.su.kdt.loggingcontrol.logger.CustomLogger;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,8 @@ public class LogController {
             .mapToObj(i -> random.nextInt(100) + 1)
             .toList();
 
+        int statusCode = HttpStatus.OK.value();
+
         for (int productId : productIds) {
             CustomLogger.logRequest(
                 "l",  // list 의 약자
@@ -36,7 +39,9 @@ public class LogController {
                 "-",
                 "-",
                 "-",
-                request
+
+                request,
+                statusCode
             );
         }
         return "상품 리스트(5행) 조회 로그 기록됨";
@@ -48,6 +53,8 @@ public class LogController {
         @RequestParam(name="user-id", required = false) String userId,
         HttpServletRequest request
     ) {
+        int statusCode = HttpStatus.OK.value();
+
         CustomLogger.logRequest(
             "v",  // view 의 약자
             "/products/" + productId,
@@ -58,7 +65,8 @@ public class LogController {
             "-",
             "-",
             "-",
-            request  // clientIp, userAgent, referer 정보를 얻기 위해 HttpServletRequest 객체를 파라미터로 추가
+            request,  // clientIp, userAgent, referer 정보를 얻기 위해 HttpServletRequest 객체를 파라미터로 추가
+            statusCode
         );
         return "상품 조회 로그 1행 기록됨";
     }
@@ -69,6 +77,8 @@ public class LogController {
         @RequestBody CartForm cartForm,
         HttpServletRequest request
     ) {
+        int statusCode = HttpStatus.OK.value();
+
         CustomLogger.logRequest(
             "c",  // cart 의 약자
             "/cart",
@@ -79,7 +89,8 @@ public class LogController {
             cartForm.getId().toString(),
             "-",
             cartForm.getQuantity().toString(),
-            request  // clientIp, userAgent, referer 정보를 얻기 위해 HttpServletRequest 객체를 파라미터로 추가
+            request,  // clientIp, userAgent, referer 정보를 얻기 위해 HttpServletRequest 객체를 파라미터로 추가
+            statusCode
         );
         return "장바구니 추가 로그 1행 기록됨";
     }
@@ -90,7 +101,9 @@ public class LogController {
         @RequestBody OrderForm orderForm,
         HttpServletRequest request
     ) {
+        int statusCode = HttpStatus.OK.value();
         CustomLogger.logRequest(
+
             "o",  // order 의 약자
             "/order",
             "POST",
@@ -100,7 +113,8 @@ public class LogController {
             orderForm.getCartId() != null ? orderForm.getCartId().toString() : "-",
             orderForm.getId().toString(),
             orderForm.getQuantity().toString(),
-            request  // clientIp, userAgent, referer 정보를 얻기 위해 HttpServletRequest 객체를 파라미터로 추가
+            request, // clientIp, userAgent, referer 정보를 얻기 위해 HttpServletRequest 객체를 파라미터로 추가
+            statusCode
         );
         return "주문 로그 1행 기록됨";
     }
