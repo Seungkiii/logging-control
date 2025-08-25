@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Goupang 홈</title>
+  <style>
+    html, body { height: 100%; margin: 0; }
+    body { display: flex; align-items: center; justify-content: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; background: #f7f7f9; }
+    .container { text-align: center; padding: 32px; background: #ffffff; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.08); width: 100%; max-width: 560px; }
+    .logo { width: 220px; height: auto; margin: 0 0 12px; display: inline-block; }
+    h1 { margin: 0 0 8px; font-size: 24px; }
+    p.sub { margin: 0 0 24px; color: #666; font-size: 14px; }
+    .btns { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 12px; }
+    a.btn, button.btn { appearance: none; border: 1px solid #e5e7eb; background: #fff; color: #111827; padding: 12px 16px; border-radius: 10px; font-size: 15px; cursor: pointer; transition: all .15s ease; text-decoration: none; display: inline-block; }
+    a.btn:hover, button.btn:hover { transform: translateY(-1px); box-shadow: 0 8px 16px rgba(0,0,0,0.06); }
+    .result { margin-top: 16px; text-align: left; background: #fafafa; border: 1px solid #eee; padding: 12px; border-radius: 8px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace; font-size: 13px; white-space: pre-wrap; color: #111; min-height: 40px; }
+  </style>
+  <script>
+    async function postJson(url, body){
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      const text = await res.text();
+      return text;
+    }
+    async function callCart(){
+      const payload = { id: 1, productId: 101, userId: 1001, quantity: 2 };
+      const txt = await postJson('/cart?tr-id=tx-cart-001', payload);
+      document.getElementById('result').textContent = txt;
+    }
+    async function callOrder(){
+      const payload = { id: 10, productId: 101, cartId: 1, userId: 1001, quantity: 2 };
+      const txt = await postJson('/order?tr-id=tx-order-001', payload);
+      document.getElementById('result').textContent = txt;
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <img class="logo" src="/images/goupang-logo.png" alt="GOUPANG 로고" />
+    <h1>패션 플랫폼 Goupang 입니다</h1>
+    <p class="sub">컨트롤러 API로 이동 / 호출해 보세요.</p>
+
+    <div class="btns">
+      <a class="btn" href="/products?user-id=demo-user">상품 리스트 조회 (GET)</a>
+      <a class="btn" href="/products/42?user-id=demo-user">상품 상세 조회 (GET)</a>
+      <a class="btn" href="/app-health">헬스 체크 (GET)</a>
+      <button class="btn" onclick="callCart()">장바구니 추가 (POST)</button>
+      <button class="btn" onclick="callOrder()">주문 생성 (POST)</button>
+    </div>
+
+    <div id="result" class="result" aria-live="polite"></div>
+  </div>
+</body>
+</html>
+
+
