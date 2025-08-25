@@ -101,8 +101,12 @@ public class LogController {
         @RequestBody OrderForm orderForm,
         HttpServletRequest request
     ) {
+        // cost 필드에 1만원 단위로 최대 10만원까지의 랜덤값 부여
+        int randomCost = (random.nextInt(10) + 1) * 10000; // 1만원 ~ 10만원 (1만원 단위)
+        orderForm.setCost(randomCost);
+        
         int statusCode = HttpStatus.OK.value();
-        CustomLogger.logRequest(
+        CustomLogger.orderLogRequest(
 
             "o",  // order 의 약자
             "/order",
@@ -113,9 +117,10 @@ public class LogController {
             orderForm.getCartId() != null ? orderForm.getCartId().toString() : "-",
             orderForm.getId().toString(),
             orderForm.getQuantity().toString(),
+            String.valueOf(randomCost),
             request, // clientIp, userAgent, referer 정보를 얻기 위해 HttpServletRequest 객체를 파라미터로 추가
             statusCode
         );
-        return "주문 로그 1행 기록됨";
+        return "주문 로그 1행 기록됨 (결제금액 : " + randomCost + "원)";
     }
 }

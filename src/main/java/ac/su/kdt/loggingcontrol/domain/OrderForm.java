@@ -10,4 +10,5 @@ public class OrderForm {
     private Long cartId;
     private Long userId;
     private Integer quantity;
+    private Integer cost;
 }

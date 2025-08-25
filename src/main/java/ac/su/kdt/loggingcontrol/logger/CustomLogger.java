@@ -42,4 +42,37 @@ public class CustomLogger {
             statusCode
         ));
     }
+
+    public static void orderLogRequest(
+        String logType,
+        String url,
+        String method,
+        String userId,
+        String transactionId,
+        String productId,
+        String cartId,
+        String orderId,
+        String quantity,
+        String cost,
+        HttpServletRequest request,
+        int statusCode
+    ) {
+        logger.info(String.format("%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%d",
+            logType,  // 로그 타입을 맨 앞에 두어서 로그 타입에 따라 필터링이 용이 하도록 함
+            LocalDateTime.now(),  // 로그 시간은 파라미터 수신할 필요가 없으므로 로그 메서드 내에서 생성
+            url,
+            method,
+            userId,
+            transactionId,
+            productId,
+            cartId,
+            orderId,
+            quantity,
+            cost,
+            CustomIpUtil.getClientIp(request),
+            request.getHeader("User-Agent"),
+            request.getHeader("Referer"),
+            statusCode
+        ));
+    }
 }
